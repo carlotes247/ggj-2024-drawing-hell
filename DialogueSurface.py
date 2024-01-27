@@ -1,8 +1,9 @@
 import pygame as pg
 import time
 
+from CustomButton import Button
+
 class Line:
-    
     def __init__(self, font, line, spacing, animationRules = []):
         self.font = font
         self.line = line
@@ -15,7 +16,7 @@ class Line:
     def fits(self, rect, offset):
         return rect.w > offset[0] + self.width and rect.h > offset[1] + self.height
     
-#TODO needs to render animated components
+    #TODO needs to render animated components
     def renderLine(self, surface, offset):
             surface.blit(self.surf, (offset[0], offset[1]))
 
@@ -24,8 +25,8 @@ class Text:
         self.text = text
         self.rect = rect
         if (fontName is None):
-            fontName = pg.font.get_default_font()
-        self.font = pg.font.SysFont("Arial", fontSize)
+            fontName = "Arial"
+        self.font = pg.font.SysFont(fontName, fontSize)
         
         #render Text
         split_string = [s.strip() for s in self.text.split(" ") if len(s.strip()) > 0]
@@ -45,6 +46,10 @@ class Text:
         
         self.lastT = time.monotonic()
         
+    def scroll(self):
+        if (self.linePos < (len(self.lines) - 1)):
+            self.linePos += 1
+    
     def update(self, surface):
         currHeight = 0
         lineCounter = 0
@@ -58,8 +63,7 @@ class Text:
         
         if (time.monotonic() - self.lastT) > 0.8:
             self.lastT = time.monotonic()
-            if (self.linePos < (len(self.lines) - 1)):
-                self.linePos += 1
+            #self.scroll()
 
 
 #this handles overall placement and stuff like scroll buttons
@@ -72,12 +76,21 @@ class DialogueSurface:
         
         self.text = None
         
+        
+        
+        self.nextBtn = Button(">", pg.Rect(self.rect.w - 30, self.rect.h - 30, 20, 20), lambda clicked, held : self.scroll() if (clicked and not held) else 0)
+        
+    
+    def scroll(self):
+        if self.text is not None:
+            self.text.scroll()
     
     def setText(self, text):
-        self.text = Text(text, self.rect)
+        self.text = Text(text, pg.Rect(self.rect.x, self.rect.y, self.rect.w, self.rect.h - 30))
     
     def update(self, screen):
         self.surf.fill(pg.Color("grey"))
+        self.nextBtn.update(self.surf)
         if (self.text is not None):
             self.text.update(self.surf)
     

@@ -22,7 +22,6 @@ def init():
     # Set the display mode
     winstyle = 0  # |FULLSCREEN
     bestdepth = pg.display.mode_ok(SCREENRECT.size, winstyle, 32)
-    print(bestdepth)
     screen = pg.display.set_mode(SCREENRECT.size, winstyle | pg.SRCALPHA, bestdepth)
     
     # decorate the game window
