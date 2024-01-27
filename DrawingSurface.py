@@ -1,7 +1,7 @@
 import os
 # import basic pygame modules
 import pygame as pg
-
+import math
 import numpy as np
 
 import pygame_widgets
@@ -17,7 +17,7 @@ class DrawSurface:
         
         self.surf = pg.Surface((self.rect.w, self.rect.h))
         self.surf.fill([255, 255, 255, 255])
-        self.idxArr = np.mgrid[:self.rect.w, : self.rect.h]
+        self.idxArr = np.mgrid[:self.rect.w, : self.rect.h].astype(np.float32)
         
         self.size = 144
         self.color = np.asarray((0, 0, 0))
@@ -57,19 +57,31 @@ class DrawSurface:
     def update(self, screen):
         mouse_pressed = pg.mouse.get_pressed(num_buttons = 3)
         pos = pg.mouse.get_pos()
-        if (self.rect.collidepoint(pos)):
-            self.pixArr = pg.surfarray.pixels3d(self.surf)
-            drawPos = (pos[0] - self.rect.x, pos[1] - self.rect.y)
-            if (mouse_pressed[2]): #right button pressed
-                radius = self.getDist(drawPos)
-                msk = radius < self.size
-                self.pixArr[msk] = [255, 255, 255]
-            elif (mouse_pressed[0]): #leftbutton pressed
-                radius = self.getDist(drawPos)
-                msk = radius < self.size
-                a = ((self.size - radius[msk]) / self.size)[:, None]
-                self.pixArr[msk] = self.pixArr[msk] * (1 - a) + a * self.color
-            del self.pixArr
+        rel = pg.mouse.get_rel()
+        self.pixArr = pg.surfarray.pixels3d(self.surf)
+        
+        xFactor = -min(rel[0] / max(rel[1], 1), 1) * math.sqrt(self.size) / 3
+        yFactor = -min(rel[1] / max(rel[0], 1), 1) * math.sqrt(self.size) / 3
+        
+        if (mouse_pressed[2] or mouse_pressed[0]):
+            x = pos[0]
+            y = pos[1]
+            while (rel[0] < 0 and x < (pos[0] - rel[0])) or (rel[0] >= 0 and x > (pos[0] - rel[0])) or (rel[1] < 0 and y < (pos[1] - rel[1])) or (rel[1] >= 0 and y > (pos[1] - rel[1])):
+                p = (x, y)
+                x += xFactor
+                y += yFactor
+                if (self.rect.collidepoint(p)):
+                    drawPos = (p[0] - self.rect.x, p[1] - self.rect.y)
+                    if (mouse_pressed[2]): #right button pressed
+                        radius = self.getDist(drawPos)
+                        msk = radius < self.size
+                        self.pixArr[msk] = [255, 255, 255]
+                    elif (mouse_pressed[0]): #leftbutton pressed
+                        radius = self.getDist(drawPos)
+                        msk = radius < self.size
+                        a = ((self.size - radius[msk]) / self.size)[:, None]
+                        self.pixArr[msk] = self.pixArr[msk] * (1 - a) + a * self.color
+        del self.pixArr
         
         screen.blit(self.surf, (self.rect.x, self.rect.y))
         
