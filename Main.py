@@ -45,7 +45,7 @@ def initDrawingSurface(surf):
 def initDialogueSurface(surf):
     pos = pg.Rect(SCREENRECT.size[0] * 0.3, SCREENRECT.size[1] * 0.75 + 20, SCREENRECT.size[0] * 0.65, SCREENRECT.size[1] * 0.2)
     res = DialogueSurface(surf, pos)
-    res.setText("This is a test String")
+    res.setText("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.")
     return res
 
 def run(screen, updatables):
