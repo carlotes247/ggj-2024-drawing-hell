@@ -20,6 +20,8 @@ class DrawSurface:
         self.surf.fill(pg.Color("black"))
         self.idxArr = np.mgrid[:self.rect.w, : self.rect.h]
         
+        self.size = 144
+        self.color = np.asarray((255, 255, 255))
         
     def getDist(self, pos):
         iArr = self.idxArr.copy()
@@ -30,6 +32,12 @@ class DrawSurface:
         
         return np.sum(iArr, axis = 0 )
     
+    def setColor(self, col):
+        self.color = np.asarray(col)
+    
+    def setSize(self, size):
+        self.size = size ** 2
+    
     def update(self, screen):
         mouse_pressed = pg.mouse.get_pressed(num_buttons = 3)
         pos = pg.mouse.get_pos()
@@ -38,13 +46,14 @@ class DrawSurface:
             drawPos = (pos[0] - self.rect.x, pos[1] - self.rect.y)
             if (mouse_pressed[2]): #right button pressed
                 radius = self.getDist(drawPos)
-                msk = radius < 144
+                msk = radius < self.size
                 self.pixArr[msk] = 0
             elif (mouse_pressed[0]): #leftbutton pressed
                 radius = self.getDist(drawPos)
-                msk = radius < 144
-                a = ((144 - radius[msk]) / 144)[:, None]
-                self.pixArr[msk] = self.pixArr[msk] * (1 - a) + a * 255
+                msk = radius < self.size
+                a = ((self.size - radius[msk]) / self.size)[:, None]
+                self.pixArr[msk] = self.pixArr[msk] * (1 - a) + a * self.color
+                print(self.color)
             del self.pixArr
         
         screen.blit(self.surf, (self.rect.x, self.rect.y))
