@@ -4,29 +4,33 @@ import time
 from CustomButton import Button
 
 class Line:
-    def __init__(self, font, line, spacing, animationRules = []):
+    def __init__(self, font, line, spacing, offset = None, txtColor = "black", bgColor = "grey", animationRules = []):
+        self.offset = offset
+        
         self.font = font
         self.line = line
         self.spacing = spacing
         self.animationRules = animationRules
         
         self.width, self.height = self.font.size(self.line)
-        self.surf = self.font.render(self.line, True, "black", "grey")
+        self.surf = self.font.render(self.line, True, txtColor, bgColor)
         
     def fits(self, rect, offset):
         return rect.w > offset[0] + self.width and rect.h > offset[1] + self.height
+    
+    def update(self, surf):
+        if self.offset is not None:
+            self.renderLine(surf, self.offset)
     
     #TODO needs to render animated components
     def renderLine(self, surface, offset):
             surface.blit(self.surf, (offset[0], offset[1]))
 
 class Text:
-    def __init__(self, text, rect, fontName = None, fontSize = 20):
+    def __init__(self, text, rect, fontName = None, fontSize = 10):
         self.text = text
         self.rect = rect
-        if (fontName is None):
-            fontName = "Arial"
-        self.font = pg.font.SysFont(fontName, fontSize)
+        self.font = pg.font.Font("./Data/ARCADE_N.TTF", fontSize)
         
         #render Text
         split_string = [s.strip() for s in self.text.split(" ") if len(s.strip()) > 0]

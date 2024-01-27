@@ -16,12 +16,11 @@ class DrawSurface:
         self.rect = position
         
         self.surf = pg.Surface((self.rect.w, self.rect.h))
-        self.surf.fill([0, 0, 0, 255])
-        self.surf.fill(pg.Color("black"))
+        self.surf.fill([255, 255, 255, 255])
         self.idxArr = np.mgrid[:self.rect.w, : self.rect.h]
         
         self.size = 144
-        self.color = np.asarray((255, 255, 255))
+        self.color = np.asarray((0, 0, 0))
         
     def getDist(self, pos):
         iArr = self.idxArr.copy()
@@ -38,6 +37,23 @@ class DrawSurface:
     def setSize(self, size):
         self.size = size ** 2
     
+    def getResultImage(self):
+        pixArr = pg.surfarray.pixels3d(self.surf)
+        area = self.idxArr[:, (pixArr[..., 0] < 255) & (pixArr[..., 1] < 255) & (pixArr[..., 2] < 255)]
+        minX, minY = np.min(area[0]), np.min(area[1])
+        maxX, maxY = np.max(area[0]), np.max(area[1])
+        msk = ((pixArr[..., 0] < 255) & (pixArr[..., 1] < 255) & (pixArr[..., 2] < 255))[minX : maxX, minY: maxY].copy()
+        del pixArr
+        
+        sur = pg.Surface((maxX - minX, maxY - minY), pg.SRCALPHA)
+        sur.fill([255, 255, 255, 0])
+        sur.blit(self.surf, (0, 0), (minX, minY, maxX - minX, maxY - minY))
+        #write alpha
+        aArr = pg.surfarray.pixels_alpha(sur)
+        aArr[~msk] = 0
+        del aArr
+        return sur
+    
     def update(self, screen):
         mouse_pressed = pg.mouse.get_pressed(num_buttons = 3)
         pos = pg.mouse.get_pos()
@@ -47,13 +63,12 @@ class DrawSurface:
             if (mouse_pressed[2]): #right button pressed
                 radius = self.getDist(drawPos)
                 msk = radius < self.size
-                self.pixArr[msk] = 0
+                self.pixArr[msk] = [255, 255, 255]
             elif (mouse_pressed[0]): #leftbutton pressed
                 radius = self.getDist(drawPos)
                 msk = radius < self.size
                 a = ((self.size - radius[msk]) / self.size)[:, None]
                 self.pixArr[msk] = self.pixArr[msk] * (1 - a) + a * self.color
-                print(self.color)
             del self.pixArr
         
         screen.blit(self.surf, (self.rect.x, self.rect.y))

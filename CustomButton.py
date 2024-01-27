@@ -1,7 +1,7 @@
 import pygame as pg
 from DrawUtil import drawRoundedRect
 class Button:
-    def __init__(self, text, rect, callback, color = "grey", clickColor = "grey", rounded = 0, fontColor = "black", fontName = None, fontSize = 12):
+    def __init__(self, text, rect, callback, color = "grey", clickColor = "grey", rounded = 0, fontColor = "black", fontName = None, fontSize = 6):
         self.text = text
         self.rect = rect
         self.callback = callback
@@ -10,9 +10,7 @@ class Button:
         self.rounded = rounded
         self.fontColor = fontColor
         
-        if (fontName is None):
-            fontName = "Arial"
-        self.font = pg.font.SysFont(fontName, fontSize)
+        self.font = pg.font.Font("./Data/ARCADE_N.TTF", fontSize)
         
         self.renderedText = self.font.render(self.text, True, fontColor, color)
         self.clickRenderedText = self.font.render(self.text, True, fontColor, clickColor)
