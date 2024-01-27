@@ -1,0 +1,14 @@
+{
+    "shirt" : {
+        "size" : [210, 444],
+        "offset" : [150, 216]
+    },
+    "shoe" : {
+        "size" : [],
+        "offset" : []
+    },
+    "pants" : {
+        "size" : [],
+        "offset" : []
+    }
+}
