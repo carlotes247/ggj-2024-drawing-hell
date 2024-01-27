@@ -1,5 +1,6 @@
 import pygame as pg
 from DrawingSurface import DrawSurface
+from DialogueSurface import DialogueSurface
 
 # see if we can load more than standard BMP
 if not pg.image.get_extended():
@@ -32,7 +33,7 @@ def init():
     screen = pg.display.set_mode( SCREENRECT.size )
     screen.fill(pg.Color("white"))
     pg.display.flip()
-    
+    screen.unlock()
     return screen
     
 
@@ -41,7 +42,13 @@ def initDrawingSurface(surf):
     res = DrawSurface(surf, pos)
     return res
 
-def run(updatables):
+def initDialogueSurface(surf):
+    pos = pg.Rect(SCREENRECT.size[0] * 0.3, SCREENRECT.size[1] * 0.75 + 20, SCREENRECT.size[0] * 0.65, SCREENRECT.size[1] * 0.2)
+    res = DialogueSurface(surf, pos)
+    res.setText("This is a test String")
+    return res
+
+def run(screen, updatables):
     
     clock = pg.time.Clock()
     
@@ -57,7 +64,7 @@ def run(updatables):
         
         #update calls
         for u in updatables:
-            u.update()
+            u.update(screen)
         
         #pygame_widgets.update(events)
         #pg.display.update(toolkitRect)
@@ -68,12 +75,12 @@ def run(updatables):
     
 
 def quit():
-    pg.time.wait(1000)
     pg.quit()
 
 
 if __name__ == "__main__":
     screen = init()
-    res = initDrawingSurface(screen)
-    run([res])
+    draw = initDrawingSurface(screen)
+    diag = initDialogueSurface(screen)
+    run(screen, [draw, diag])
     quit()
