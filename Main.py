@@ -16,6 +16,7 @@ CENTER = (SCREENRECT.w // 2, SCREENRECT.h // 2)
 QUARTER = (SCREENRECT.w // 4, SCREENRECT.h // 4)
 DRAWRECT = pg.Rect(QUARTER[0], QUARTER[1], CENTER[0], CENTER[1])
 CHARRECT = pg.Rect(16, QUARTER[1], QUARTER[0] - 32, CENTER[1] + QUARTER[1])
+DIAGRECT = pg.Rect(QUARTER[0], QUARTER[1] + CENTER[1] + 48, CENTER[0], QUARTER[1] - 96)
 
 SELECTRECT = pg.Rect(CENTER[0] + QUARTER[0] + 32, QUARTER[1] / 2, QUARTER[0] - 64, CENTER[1] + QUARTER[1])
 
@@ -53,7 +54,7 @@ def initDrawingSurface(surf):
     return res
 
 def initDialogueSurface(surf):
-    res = DialogueSurface(surf, DIALOGUERECT)
+    res = DialogueSurface(surf, DIAGRECT)
     res.setText("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.")
     return res
 
@@ -69,7 +70,7 @@ def drawBG(surf):
     
 
 
-def generateButtons(surf, DrawingSurf, characterSurface):
+def generateButtons(surf, DrawingSurf, diagSurf, characterSurface):
     
     diagWid = SELECTRECT.w / 5
     selectCenter = SELECTRECT.x + SELECTRECT.w / 2
@@ -87,7 +88,8 @@ def generateButtons(surf, DrawingSurf, characterSurface):
     ref = functools.partial(updateColor, l1, DrawingSurf)
     
     l = [
-    Button("SUBMIT", pg.Rect(QUARTER[0], QUARTER[1] + CENTER[1] + 32, 200, 50), lambda clicked, held : dressCharacter(characterSurface, DrawingSurf.getResultImage()) if clicked and not held else 0, rounded = 25, fontSize = 24, color = pg.Color(162, 126, 144), clickColor = pg.Color(82, 32, 82), fontColor = "white"),
+    Button("CLEAR", pg.Rect(selectCenter - 100, QUARTER[1] + CENTER[1] - 18, 200, 50), lambda clicked, held : DrawingSurf.clear() if clicked and not held else 0, rounded = 25, fontSize = 24, color = pg.Color(162, 126, 144), clickColor = pg.Color(82, 32, 82), fontColor = "white"),
+    Button("SUBMIT", pg.Rect(selectCenter - 100, QUARTER[1] + CENTER[1] + 32, 200, 50), lambda clicked, held : dressCharacter(characterSurface,diagSurf, DrawingSurf.getResultImage()) if clicked and not held else 0, rounded = 25, fontSize = 24, color = pg.Color(162, 126, 144), clickColor = pg.Color(82, 32, 82), fontColor = "white"),
     Button("", pg.Rect(selectCenter - diagWid - 24, SELECTRECT.y + topColorLine, 48, 48), lambda clicked, held : ref(clicked, held, (0, 89, 109)), color = pg.Color(0, 89, 109), rounded = 24),
     Button("", pg.Rect(selectCenter - 24, SELECTRECT.y + topColorLine, 48, 48), lambda clicked, held : ref(clicked, held, (232, 151, 46)), color = pg.Color(232, 151, 46), rounded = 24),
     Button("", pg.Rect(selectCenter + diagWid - 24, SELECTRECT.y + topColorLine, 48, 48), lambda clicked, held : ref(clicked, held, (255, 236, 167)), color = pg.Color(255, 236, 167), rounded = 24),
@@ -119,8 +121,9 @@ def updateColor(l, DrawingSurf, click, held, color):
             i.color = color
         DrawingSurf.setColor(color)
 
-def dressCharacter(characterSurface, image):
+def dressCharacter(characterSurface, diagSurf, image):
     characterSurface.dressShirt(image)
+    diagSurf.setText("")
 
 def run(screen, updatables):
     
@@ -161,10 +164,11 @@ if __name__ == "__main__":
     BackgroundImage = pg.transform.scale(BackgroundImage, (SCREENRECT.w, SCREENRECT.h))
     
     draw = initDrawingSurface(screen)
+    diag = initDialogueSurface(screen)
     char = initCharacterSurface(screen)
-    lst = generateButtons(screen, draw, char)
+    lst = generateButtons(screen, draw, diag, char)
     lst.append(draw)
+    lst.append(diag)
     lst.append(char)
-    #diag = initDialogueSurface(screen)
     run(screen, lst)
     quit()

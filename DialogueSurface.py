@@ -39,7 +39,7 @@ class Text:
         self.lines = [""]
         while (len(split_string) > 0):
             w, _ = self.font.size(self.lines[-1] + " " + split_string[0])
-            if w < self.rect.w:
+            if (w + self.rect.x) < (self.rect.w - self.rect.x):
                 self.lines[-1] = self.lines[-1] + " " + split_string[0]
             else:
                 self.lines.append("")
@@ -55,7 +55,7 @@ class Text:
             self.linePos += 1
     
     def update(self, surface):
-        currHeight = 0
+        currHeight = self.rect.y
         lineCounter = 0
         while (lineCounter + self.linePos) < len(self.lines):
             line = self.lines[lineCounter + self.linePos]
@@ -90,7 +90,7 @@ class DialogueSurface:
             self.text.scroll()
     
     def setText(self, text):
-        self.text = Text(text, pg.Rect(self.rect.x, self.rect.y, self.rect.w, self.rect.h - 30))
+        self.text = Text(text, pg.Rect(10, 15, self.rect.w, self.rect.h - 30))
     
     def update(self, screen):
         self.surf.fill(pg.Color("grey"))

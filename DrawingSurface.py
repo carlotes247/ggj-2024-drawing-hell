@@ -36,12 +36,19 @@ class DrawSurface:
     
     def setSize(self, size):
         self.size = size ** 2
+   
+    def clear(self):
+        self.surf.fill([255, 255, 255, 255])
     
     def getResultImage(self):
         pixArr = pg.surfarray.pixels3d(self.surf)
         area = self.idxArr[:, (pixArr[..., 0] < 255) & (pixArr[..., 1] < 255) & (pixArr[..., 2] < 255)]
-        minX, minY = np.min(area[0]), np.min(area[1])
-        maxX, maxY = np.max(area[0]), np.max(area[1])
+        if (area.shape[0] == 0 or area.shape[1] == 0):
+            sur = pg.Surface((32, 32), pg.SRCALPHA)
+            sur.fill([255, 255, 255, 0])
+            return sur
+        minX, minY = int(np.min(area[0])), int(np.min(area[1]))
+        maxX, maxY = int(np.max(area[0])), int(np.max(area[1]))
         msk = ((pixArr[..., 0] < 255) & (pixArr[..., 1] < 255) & (pixArr[..., 2] < 255))[minX : maxX, minY: maxY].copy()
         del pixArr
         
