@@ -158,7 +158,7 @@ def run(screen, draw, state, characterSurface, grave, updatables):
                 return
             if event.type == state.SUBMIT_EVENT:
                 img = draw.getResultImage()
-                state.diag.checkResponse(img)
+                state.diag.checkResponse(img, torch_model, device)
                 characterSurface.dressShirt(img)
                 pg.time.set_timer(pg.event.Event(state.NEW_CHARACTER_EVENT), 2000, loops = 1)
             elif event.type == state.NEW_CHARACTER_EVENT:
