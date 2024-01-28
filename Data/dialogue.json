@@ -15,15 +15,23 @@
     "request" : [
     {
         "requestText" : "Can I have shirt please?",
-        "objType" : "shirt"
+        "objType" : "top"
     },
     {
-        "requestText" : "HELP! I need pants.",
-        "objType" : "pants"
+        "requestText" : "HELP! I need trousers.",
+        "objType" : "trousers"
     },
     {
         "requestText" : "Once my pants were on fire. Now they are gone.",
-        "objType" : "pants"
+        "objType" : "trousers"
+    },
+    {
+        "requestText" : "Shibbedy shirt please",
+        "objType" : "top"
+    },
+    {
+        "requestText" : "Not only shartless but shirtless. Please fix one of those",
+        "objType" : "top"
     }
     ]
 }
