@@ -143,6 +143,17 @@ def updateColor(l, DrawingSurf, click, held, color):
             i.color = color
         DrawingSurf.setColor(color)
 
+def renderCharacterPart(screen, characterSurface, state):
+    if (state.diag.currRequest is None):
+        return
+    sur = characterSurface.getCharCrop(state.diag.currRequest["objType"])
+    surSze = sur.get_size()
+    ratio = min((DRAWRECT.w - 48) / surSze[0], (DRAWRECT.h - 96) / surSze[1])
+    sur = pg.transform.scale_by(sur, ratio)
+    surSze = sur.get_size()
+    screen.blit(sur, (DRAWRECT.x + 16 + DRAWRECT.w / 2 - surSze[0] / 2, DRAWRECT.y + 16 + 48))
+    
+
 def run(screen, draw, state, characterSurface, grave, updatables):
     
     clock = pg.time.Clock()
@@ -165,9 +176,12 @@ def run(screen, draw, state, characterSurface, grave, updatables):
                 state.diag.request()
                 draw.clear()
                 characterSurface.setCharacter(random.choice(["./Data/personShape1.png", "./Data/personShape2.png", "./Data/personShape3.png"]))
+                characterSurface.setHighlightArea(state.diag.currRequest["objType"])
                 grave.generate(state)
         
         drawBG(screen)
+        
+        renderCharacterPart(screen, characterSurface, state)
         
         #update calls
         for u in updatables:

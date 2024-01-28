@@ -20,6 +20,11 @@ class CharacterSurface:
         self.pants = pants #transform
         #self.pants = pg.transform.scale(self.pants, self.map["pants"]["size"])
         
+        self.highlight = None
+        self.highlightRect = pg.Surface((32, 32), pg.SRCALPHA)
+        self.highlightRect.fill((255, 255, 255, 24))
+        
+        
     
     def setCharacter(self, image):
         self.imageName = image[1 + image.rfind("/") : image.rfind(".")]
@@ -58,6 +63,25 @@ class CharacterSurface:
         x, y = p
         return (x * self.pos.w / self.sze[0], y * self.pos.h / self.sze[1])
     
+    def getCharCrop(self, type):
+        off = self.transformFromImgToSurf(self.map[self.imageName][type]["offset"])
+        sze = self.transformFromImgToSurf(self.map[self.imageName][type]["size"])
+        #handle shoes
+        sur = pg.Surface(sze, pg.SRCALPHA)
+        sur.blit(self.image, (0,0), area = (off[0], off[1], sze[0], sze[1]))
+        aArr = pg.surfarray.pixels_alpha(sur)
+        pixArr = pg.surfarray.pixels3d(sur)
+        aArr[True] = 24
+        aArr[(pixArr[..., 1] + pixArr[..., 0] + pixArr[..., 2]) == 0] = 0
+        del aArr
+        del pixArr
+        return sur
+    
+    def setHighlightArea(self, type):
+        sze = self.transformFromImgToSurf(self.map[self.imageName][type]["size"])
+        self.highlight = type
+        self.highlightRect = pg.transform.scale(self.highlightRect, sze)
+    
     def dressShirt(self, image):
         self.shirt = image #transform
         sze = self.map[self.imageName]["shirt"]["size"]
@@ -66,7 +90,13 @@ class CharacterSurface:
     
     def update(self, surface, state):
         surface.blit(self.image, self.pos)
+        
         absOff = surface.get_abs_offset()
+        if (self.highlight is not None):
+            off = self.transformFromImgToSurf(self.map[self.imageName][self.highlight]["offset"])
+        
+            surface.blit(self.highlightRect, (off[0] + absOff[0] + self.pos[0], off[1] + absOff[1] + self.pos[1]))
+        
         map = self.map[self.imageName]
         if self.shoe is not None:
             off = self.transformFromImgToSurf(map["shoe"]["offset"][0])
