@@ -49,6 +49,6 @@ class DialogueState:
         self.diag.setText(req["requestText"])
     
     def checkResponse(self, image, model, device):
-        #Classify(model, device, classes, test_data, image)
+        predictedClass = Classify(model, device, classes, test_data, image)
         self.accept("shirt")
         
