@@ -1,5 +1,11 @@
 import json
 import random
+import torch
+from ModelTorch import *
+from ModelLoader import *
+from ModelEvaluator import *
+
+
 
 class DialogueState:
     def __init__(self, file, dialogue):
@@ -32,6 +38,7 @@ class DialogueState:
         self.currRequest = req
         self.diag.setText(req["requestText"])
     
-    def checkResponse(self, image):
+    def checkResponse(self, image, model, device):
+        Classify(model, device, classes, test_data, image)
         self.accept()
         
