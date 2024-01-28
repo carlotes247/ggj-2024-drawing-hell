@@ -88,10 +88,12 @@ class DrawSurface:
                     elif (mouse_pressed[0]): #leftbutton pressed
                         radius = self.getDist(drawPos)
                         msk = radius < self.size
-                        a = ((self.size - radius[msk]) / self.size)[..., None]
-                        self.pixArr[msk] = (self.pixArr[msk] * self.aArr[msk, None] + a * self.color)
+                        a = ((self.size - radius[msk]) / self.size)
+                        
                         t = 255
-                        self.aArr[msk] = np.minimum(self.aArr[msk] + (a.squeeze() * 255).astype(np.uint32), t)
+                        t = np.minimum(self.aArr[msk].astype(np.float32) + (a * 255), t)
+                        self.pixArr[msk] = (self.pixArr[msk] * (t / 255 - a)[..., None] + a[..., None] * self.color) / (t[..., None] / 255)
+                        self.aArr[msk] = t.astype(np.uint32)
         del self.pixArr
         del self.aArr
         
