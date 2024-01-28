@@ -15,8 +15,8 @@ class DrawSurface:
         
         self.rect = position
         
-        self.surf = pg.Surface((self.rect.w, self.rect.h))
-        self.surf.fill([255, 255, 255, 255])
+        self.surf = pg.Surface((self.rect.w, self.rect.h), pg.SRCALPHA)
+        self.surf.fill([255, 255, 255, 0])
         self.idxArr = np.mgrid[:self.rect.w, : self.rect.h].astype(np.float32)
         
         self.size = 144
@@ -38,7 +38,7 @@ class DrawSurface:
         self.size = size ** 2
    
     def clear(self):
-        self.surf.fill([255, 255, 255, 255])
+        self.surf.fill([255, 255, 255, 0])
     
     def getResultImage(self):
         pixArr = pg.surfarray.pixels3d(self.surf)
@@ -66,6 +66,7 @@ class DrawSurface:
         pos = pg.mouse.get_pos()
         rel = pg.mouse.get_rel()
         self.pixArr = pg.surfarray.pixels3d(self.surf)
+        self.aArr = pg.surfarray.pixels_alpha(self.surf)
         
         xFactor = -min(rel[0] / max(rel[1], 1), 1) * math.sqrt(self.size) / 3
         yFactor = -min(rel[1] / max(rel[0], 1), 1) * math.sqrt(self.size) / 3
@@ -83,12 +84,16 @@ class DrawSurface:
                         radius = self.getDist(drawPos)
                         msk = radius < self.size
                         self.pixArr[msk] = [255, 255, 255]
+                        self.aArr[msk] = 0
                     elif (mouse_pressed[0]): #leftbutton pressed
                         radius = self.getDist(drawPos)
                         msk = radius < self.size
-                        a = ((self.size - radius[msk]) / self.size)[:, None]
-                        self.pixArr[msk] = self.pixArr[msk] * (1 - a) + a * self.color
+                        a = ((self.size - radius[msk]) / self.size)[..., None]
+                        self.pixArr[msk] = (self.pixArr[msk] * self.aArr[msk, None] + a * self.color)
+                        t = 255
+                        self.aArr[msk] = np.minimum(self.aArr[msk] + (a.squeeze() * 255).astype(np.uint32), t)
         del self.pixArr
+        del self.aArr
         
         screen.blit(self.surf, (self.rect.x, self.rect.y))
         

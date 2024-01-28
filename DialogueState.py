@@ -15,17 +15,27 @@ class DialogueState:
         
         self.currRequest = None
     
-    def accept(self):
-        self.currRequest = None
+    def accept(self, obj):
         acc = random.choice(self.acceptTxt)
+        txt = acc["acceptText"]
         #parse response
-        self.diag.setText(acc["acceptText"])
-    
-    def reject(self):
+        if ("expObjName" in acc.keys()):
+            txt = txt.replace(acc["expObjName"], self.currRequest["objType"])
+        if ("acqObjName" in acc.keys()):
+            txt = txt.replace(acc["acqObjName"], obj)
+        self.diag.setText(txt)
         self.currRequest = None
+    
+    def reject(self, obj):
         acc = random.choice(self.rejectTxt)
+        txt = acc["rejectText"]
         #parse response
-        self.diag.setText(acc["rejectText"])
+        if ("expObjName" in acc.keys()):
+            txt = txt.replace(acc["expObjName"], self.currRequest["objType"])
+        if ("acqObjName" in acc.keys()):
+            txt = txt.replace(acc["acqObjName"], obj)
+        self.diag.setText(txt)
+        self.currRequest = None
     
     def request(self):
         req = random.choice(self.requestTxt)
@@ -33,5 +43,5 @@ class DialogueState:
         self.diag.setText(req["requestText"])
     
     def checkResponse(self, image):
-        self.accept()
+        self.accept("shirt")
         
