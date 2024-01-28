@@ -4,8 +4,6 @@ import pygame as pg
 import math
 import numpy as np
 
-import pygame_widgets
-
 main_dir = os.path.split(os.path.abspath(__file__))[0]
 
 
@@ -99,18 +97,3 @@ class DrawSurface:
         
         screen.blit(self.surf, (self.rect.x, self.rect.y))
         
-
-
-#def main(winstyle=0):
-    #toolkitRect = pg.Rect(SCREENRECT.size[0] * 0.05, SCREENRECT.size[1] * 0.1, SCREENRECT.size[0] * 0.2, SCREENRECT.size[1] * 0.65)
-    #toolkitSurface = screen.subsurface(toolkitRect)
-    #toolkitSurface.fill(pg.Color("grey"))
-    
-    #r_slider = Slider(toolkitSurface, 10, 20, SCREENRECT.size[0] * 0.2 - 20, 20, min=0, max=255, step=1)
-    #g_slider = Slider(toolkitSurface, 10, 60, SCREENRECT.size[0] * 0.2 - 20, 20, min=0, max=255, step=1)
-    #b_slider = Slider(toolkitSurface, 10, 100, SCREENRECT.size[0] * 0.2 - 20, 20, min=0, max=255, step=1)
-    #rgb_text = TextBox(toolkitSurface, 10, 140, SCREENRECT.size[0] * 0.2 - 20, 20, fontSize=15)
-    #rgb_text.disable()
-    
-    #test_button = Button(toolkitSurface, 10, 180, SCREENRECT.size[0] * 0.2 - 20, 20, text="test", onClick = lambda: print("clicked"))
-    

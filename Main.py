@@ -1,6 +1,6 @@
 import pygame as pg
 import functools
-import  random
+import random
 import json
 
 from DrawingSurface import DrawSurface
