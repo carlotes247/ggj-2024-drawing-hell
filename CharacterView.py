@@ -1,6 +1,7 @@
 import pygame as pg
 from DrawUtil import load_image
 import json
+import numpy as np
 
 class CharacterSurface:
     
@@ -34,6 +35,18 @@ class CharacterSurface:
         pixArr[pixArr[..., 1] > (pixArr[..., 0] + pixArr[..., 2])] = (127, 86, 2)
         aArr[(pixArr[..., 1] + pixArr[..., 0] + pixArr[..., 2]) > 0] = 196
         aArr[(pixArr[..., 1] + pixArr[..., 0] + pixArr[..., 2]) == 0] = 0
+        
+        
+        sze = aArr.shape
+        
+        ySze = sze[1] / 4
+        
+        y, x = np.mgrid[-sze[0] / 2:sze[0] / 2,-ySze:sze[1]  -ySze]
+        weights = ((x ** 2) / (sze[1] ** 2 / 4)) + ((y ** 2) / (sze[0] ** 2 / 4))
+        weights = np.clip((1.0 - weights), 0.6, 1)
+        
+        aArr[True] = (aArr.astype(np.float32) * weights).astype(np.uint8)
+        
         del pixArr
         del aArr
         
@@ -47,7 +60,8 @@ class CharacterSurface:
     
     def dressShirt(self, image):
         self.shirt = image #transform
-        self.shirt = pg.transform.scale(self.shirt, self.map[self.imageName]["shirt"]["size"])
+        sze = self.map[self.imageName]["shirt"]["size"]
+        self.shirt = pg.transform.scale(self.shirt, (sze[0] * 2, sze[1] * 2))
         self.shirt = pg.transform.scale(self.shirt, self.transformFromImgToSurf(self.map[self.imageName]["shirt"]["size"]))
     
     def update(self, surface, state):
