@@ -61,7 +61,7 @@ class DrawSurface:
         del aArr
         return sur
     
-    def update(self, screen):
+    def update(self, screen, state):
         mouse_pressed = pg.mouse.get_pressed(num_buttons = 3)
         pos = pg.mouse.get_pos()
         rel = pg.mouse.get_rel()

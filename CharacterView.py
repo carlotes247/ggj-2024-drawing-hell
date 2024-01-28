@@ -49,7 +49,7 @@ class CharacterSurface:
         self.shirt = image #transform
         self.shirt = pg.transform.scale(self.shirt, self.transformFromImgToSurf(self.map[self.imageName]["shirt"]["size"]))
     
-    def update(self, surface):
+    def update(self, surface, state):
         surface.blit(self.image, self.pos)
         absOff = surface.get_abs_offset()
         map = self.map[self.imageName]

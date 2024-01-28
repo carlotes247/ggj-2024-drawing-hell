@@ -1,5 +1,17 @@
 {
-    "acceptResponse" : [],
-    "rejectResponse" : [],
-    "request" : []
+    "acceptResponse" : [
+        {
+            "acceptText" : "Wow! Thanks!"
+        }
+    ],
+    "rejectResponse" : [
+        {
+            "rejectText" : "Thats weird."
+        }
+    ],
+    "request" : [
+    {
+        "requestText" : "Can i have  shirt please"
+    }
+    ]
 }

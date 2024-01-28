@@ -18,7 +18,7 @@ class Line:
     def fits(self, rect, offset):
         return rect.w > offset[0] + self.width and rect.h > offset[1] + self.height
     
-    def update(self, surf):
+    def update(self, surf, state):
         if self.offset is not None:
             self.renderLine(surf, self.offset)
     
@@ -56,7 +56,7 @@ class Text:
         if (self.linePos < (len(self.lines) - 1)):
             self.linePos += 1
     
-    def update(self, surface):
+    def update(self, surface, state):
         currHeight = self.rect.y
         lineCounter = 0
         while (lineCounter + self.linePos) < len(self.lines):
@@ -84,7 +84,7 @@ class DialogueSurface:
         
         
         
-        self.nextBtn = Button(">", pg.Rect(self.rect.w - 30, self.rect.h - 30, 20, 20), lambda clicked, held : self.scroll() if (clicked and not held) else 0)
+        self.nextBtn = Button(">", pg.Rect(self.rect.w - 30, self.rect.h - 30, 20, 20), lambda state, clicked, held : self.scroll() if (clicked and not held) else 0)
         
     
     def scroll(self):
@@ -94,9 +94,9 @@ class DialogueSurface:
     def setText(self, text):
         self.text = Text(text, pg.Rect(10, 15, self.rect.w, self.rect.h - 30))
     
-    def update(self, screen):
+    def update(self, screen, state):
         self.surf.fill(pg.Color("grey"))
-        self.nextBtn.update(self.surf)
+        self.nextBtn.update(self.surf, state)
         if (self.text is not None):
-            self.text.update(self.surf)
+            self.text.update(self.surf, state)
     

@@ -30,7 +30,7 @@ class Gravestone:
         self.deathCause = Text("", pg.Rect(30, 90, position.w, position.h), fontSize =  12, txtColor = "black", bgColor = None)
         
         self.colorGravestone()
-        self.generate()
+        self.generate(None)
     
     def colorGravestone(self):
         pixArr = pg.surfarray.pixels3d(self.baseImage)
@@ -42,7 +42,7 @@ class Gravestone:
         del aArr
         
     
-    def generate(self):
+    def generate(self, state):
         name = random.choice(["maleNames", "femaleNames"])
         name = random.choice(Gravestone.dataSet[name])
         self.firstName = self.nameFont.render(name, True, "black", (86, 86, 86))
@@ -52,9 +52,9 @@ class Gravestone:
         
         self.image = self.baseImage.copy()
         self.image.blit(self.firstName, (self.pos.w / 2 - w / 2, 50))
-        self.deathCause.update(self.image)
+        self.deathCause.update(self.image, state)
     
-    def update(self, surface):
+    def update(self, surface, state):
         
         surface.blit(self.image, (self.pos.x, self.pos.y))
         

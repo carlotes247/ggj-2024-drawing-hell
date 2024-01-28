@@ -19,7 +19,7 @@ class Button:
         self.clicked = True
         
         
-    def update(self, surface):
+    def update(self, surface, state):
         
         #handle clicking
         pos = pg.mouse.get_pos()
@@ -29,18 +29,18 @@ class Button:
             c = pg.mouse.get_pressed(num_buttons = 3)[0]
             
             if (c and not self.clicked):
-                self.callback(True, False)
+                self.callback(state, True, False)
             self.clicked = c
         else:
             self.clicked = False
-            self.callback(False, False)
+            self.callback(state, False, False)
         
         bgColor = self.color
         txt = self.renderedText
         if (self.clicked):
             bgColor = self.clickColor
             txt = self.clickRenderedText
-            self.callback(False, True)
+            self.callback(state, False, True)
         #render background
         drawRoundedRect(surface, self.rect, bgColor, self.rounded)
         #render text
