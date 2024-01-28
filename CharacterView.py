@@ -47,6 +47,7 @@ class CharacterSurface:
     
     def dressShirt(self, image):
         self.shirt = image #transform
+        self.shirt = pg.transform.scale(self.shirt, self.map[self.imageName]["shirt"]["size"])
         self.shirt = pg.transform.scale(self.shirt, self.transformFromImgToSurf(self.map[self.imageName]["shirt"]["size"]))
     
     def update(self, surface, state):
