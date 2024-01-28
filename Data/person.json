@@ -1,14 +1,44 @@
 {
-    "shirt" : {
-        "size" : [210, 444],
-        "offset" : [150, 216]
+    "personShape1" : {
+        "shirt" : {
+            "size" : [31, 30],
+            "offset" : [0, 24]
+        },
+        "shoe" : {
+            "size" : [[13, 5], [11, 3]],
+            "offset" : [[18, 70], [11, 71]]
+        },
+        "pants" : {
+            "size" : [25, 17],
+            "offset" : [4, 52]
+        }
     },
-    "shoe" : {
-        "size" : [],
-        "offset" : []
+    "personShape2" : {
+        "shirt" : {
+            "size" : [28, 28],
+            "offset" : [0, 25]
+        },
+        "shoe" : {
+            "size" : [[12, 5], [12, 5]],
+            "offset" : [[16, 70], [7, 70]]
+        },
+        "pants" : {
+            "size" : [17, 16],
+            "offset" : [4, 53]
+        }
     },
-    "pants" : {
-        "size" : [],
-        "offset" : []
+    "personShape3" : {
+        "shirt" : {
+            "size" : [17, 28],
+            "offset" : [2, 24]
+        },
+        "shoe" : {
+            "size" : [[11,3], [10,4]],
+            "offset" : [[13,71], [4,70]]
+        },
+        "pants" : {
+            "size" : [14,19],
+            "offset" : [2,51]
+        }
     }
 }

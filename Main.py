@@ -16,7 +16,7 @@ SCREENRECT = pg.Rect(0, 0, 1366, 768)
 CENTER = (SCREENRECT.w // 2, SCREENRECT.h // 2)
 QUARTER = (SCREENRECT.w // 4, SCREENRECT.h // 4)
 DRAWRECT = pg.Rect(QUARTER[0], QUARTER[1], CENTER[0], CENTER[1])
-CHARRECT = pg.Rect(16, QUARTER[1], QUARTER[0] - 32, CENTER[1] + QUARTER[1])
+CHARRECT = pg.Rect(16, QUARTER[1] / 2, QUARTER[0] - 32, CENTER[1] + 24 + QUARTER[1] / 2)
 DIAGRECT = pg.Rect(QUARTER[0], QUARTER[1] + CENTER[1] + 48, CENTER[0], QUARTER[1] - 96)
 GRAVERECT = pg.Rect(48, QUARTER[1] + CENTER[1] + 8 - 32, QUARTER[0] - 96, QUARTER[1] + 32)
 
@@ -63,6 +63,7 @@ def initDialogueSurface(surf):
 
 def initCharacterSurface(surf):
     res = CharacterSurface(pg.Rect(CHARRECT.x, CHARRECT.y, CHARRECT.w, CHARRECT.h), "./Data/person.png", "./Data/person.json")
+    res.setCharacter("./Data/personShape1.png")
     return res
 
 def drawBG(surf):
