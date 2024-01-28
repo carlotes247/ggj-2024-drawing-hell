@@ -10,6 +10,7 @@ from CustomButton import Button
 from DialogueState import DialogueState
 from State import State
 from DrawUtil import *
+from ModelLoader import *
 # see if we can load more than standard BMP
 if not pg.image.get_extended():
     raise SystemExit("Sorry, extended image module required")
@@ -29,6 +30,17 @@ SELECTRECT = pg.Rect(CENTER[0] + QUARTER[0] + 32, QUARTER[1] / 2, QUARTER[0] - 6
 BackgroundImage = None
 SubmitButton = None
 
+# pytorch vars
+torch_model = None
+# Get cpu, gpu or mps device for training.
+device = (
+    "cuda"
+    if torch.cuda.is_available()
+    else "mps"
+    if torch.backends.mps.is_available()
+    else "cpu"
+)
+
 def init():
     # Initialize pygame
     if pg.get_sdl_version()[0] == 2:
@@ -46,6 +58,10 @@ def init():
     # decorate the game window
     pg.display.set_caption("Pygame Demo")
     pg.mouse.set_visible(1)
+
+    # Load model
+    global torch_model
+    torch_model = LoadModel(device, "model.pth")
 
     # create the background, tile the bgd image
     screen = pg.display.set_mode( SCREENRECT.size )
