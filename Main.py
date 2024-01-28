@@ -20,7 +20,7 @@ SCREENRECT = pg.Rect(0, 0, 1366, 768)
 CENTER = (SCREENRECT.w // 2, SCREENRECT.h // 2)
 QUARTER = (SCREENRECT.w // 4, SCREENRECT.h // 4)
 DRAWRECT = pg.Rect(QUARTER[0], QUARTER[1], CENTER[0], CENTER[1])
-CHARRECT = pg.Rect(16, QUARTER[1] / 2, QUARTER[0] - 32, CENTER[1] + 24 + QUARTER[1] / 2)
+CHARRECT = pg.Rect(16, QUARTER[1] / 4, QUARTER[0] - 32, CENTER[1] + 24 + QUARTER[1] / 2)
 DIAGRECT = pg.Rect(QUARTER[0], QUARTER[1] + CENTER[1] + 48, CENTER[0], QUARTER[1] - 96)
 GRAVERECT = pg.Rect(48, QUARTER[1] + CENTER[1] + 8 - 32, QUARTER[0] - 96, QUARTER[1] + 32)
 
@@ -143,6 +143,17 @@ def updateColor(l, DrawingSurf, click, held, color):
             i.color = color
         DrawingSurf.setColor(color)
 
+def renderCharacterPart(screen, characterSurface, state):
+    if (state.diag.currRequest is None):
+        return
+    sur = characterSurface.getCharCrop(state.diag.currRequest["objType"])
+    surSze = sur.get_size()
+    ratio = min((DRAWRECT.w - 48) / surSze[0], (DRAWRECT.h - 96) / surSze[1])
+    sur = pg.transform.scale_by(sur, ratio)
+    surSze = sur.get_size()
+    screen.blit(sur, (DRAWRECT.x + 16 + DRAWRECT.w / 2 - surSze[0] / 2, DRAWRECT.y + 16 + 48))
+    
+
 def run(screen, draw, state, characterSurface, grave, updatables):
     
     clock = pg.time.Clock()
@@ -158,16 +169,20 @@ def run(screen, draw, state, characterSurface, grave, updatables):
                 return
             if event.type == state.SUBMIT_EVENT:
                 img = draw.getResultImage()
-                state.diag.checkResponse(img, torch_model, device)
-                characterSurface.dressShirt(img)
+                if (state.diag.currRequest is not None):
+                    characterSurface.dressCloth(img, state.diag.currRequest["objType"])
+                    state.diag.checkResponse(img, torch_model, device)
                 pg.time.set_timer(pg.event.Event(state.NEW_CHARACTER_EVENT), 2000, loops = 1)
             elif event.type == state.NEW_CHARACTER_EVENT:
                 state.diag.request()
                 draw.clear()
                 characterSurface.setCharacter(random.choice(["./Data/personShape1.png", "./Data/personShape2.png", "./Data/personShape3.png"]))
+                characterSurface.setHighlightArea(state.diag.currRequest["objType"])
                 grave.generate(state)
         
         drawBG(screen)
+        
+        renderCharacterPart(screen, characterSurface, state)
         
         #update calls
         for u in updatables:

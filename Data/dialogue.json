@@ -1,17 +1,29 @@
 {
     "acceptResponse" : [
         {
-            "acceptText" : "Wow! Thanks!"
+            "acceptText" : "Wow! Thanks! I love my new {1}.",
+            "expObjName" : "{1}"
         }
     ],
     "rejectResponse" : [
         {
-            "rejectText" : "Thats weird."
+            "rejectText" : "Thats weird. It looks like a {2}. I expected {1} instead",
+            "expObjName" : "{1}",
+            "acqObjName" : "{2}"
         }
     ],
     "request" : [
     {
-        "requestText" : "Can i have  shirt please"
+        "requestText" : "Can I have shirt please?",
+        "objType" : "shirt"
+    },
+    {
+        "requestText" : "HELP! I need pants.",
+        "objType" : "pants"
+    },
+    {
+        "requestText" : "Once my pants were on fire. Now they are gone.",
+        "objType" : "pants"
     }
     ]
 }
