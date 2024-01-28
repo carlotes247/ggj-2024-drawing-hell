@@ -4,6 +4,7 @@ import functools
 from DrawingSurface import DrawSurface
 from DialogueSurface import DialogueSurface, Line
 from CharacterView import CharacterSurface
+from GraveStone import Gravestone
 from CustomButton import Button
 from DrawUtil import *
 # see if we can load more than standard BMP
@@ -17,6 +18,8 @@ QUARTER = (SCREENRECT.w // 4, SCREENRECT.h // 4)
 DRAWRECT = pg.Rect(QUARTER[0], QUARTER[1], CENTER[0], CENTER[1])
 CHARRECT = pg.Rect(16, QUARTER[1], QUARTER[0] - 32, CENTER[1] + QUARTER[1])
 DIAGRECT = pg.Rect(QUARTER[0], QUARTER[1] + CENTER[1] + 48, CENTER[0], QUARTER[1] - 96)
+GRAVERECT = pg.Rect(48, QUARTER[1] + CENTER[1] + 8 - 32, QUARTER[0] - 96, QUARTER[1] + 32)
+
 
 SELECTRECT = pg.Rect(CENTER[0] + QUARTER[0] + 32, QUARTER[1] / 2, QUARTER[0] - 64, CENTER[1] + QUARTER[1])
 
@@ -124,6 +127,7 @@ def updateColor(l, DrawingSurf, click, held, color):
 def dressCharacter(characterSurface, diagSurf, image):
     characterSurface.dressShirt(image)
     diagSurf.setText("")
+    #grave.generate()
 
 def run(screen, updatables):
     
@@ -166,9 +170,11 @@ if __name__ == "__main__":
     draw = initDrawingSurface(screen)
     diag = initDialogueSurface(screen)
     char = initCharacterSurface(screen)
+    grave = Gravestone(GRAVERECT)
     lst = generateButtons(screen, draw, diag, char)
     lst.append(draw)
     lst.append(diag)
     lst.append(char)
+    lst.append(grave)
     run(screen, lst)
     quit()

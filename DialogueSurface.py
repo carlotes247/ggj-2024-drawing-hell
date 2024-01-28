@@ -27,11 +27,16 @@ class Line:
             surface.blit(self.surf, (offset[0], offset[1]))
 
 class Text:
-    def __init__(self, text, rect, fontName = None, fontSize = 10):
-        self.text = text
+    def __init__(self, text, rect, fontName = None, fontSize = 10, txtColor = "black", bgColor = "grey"):
         self.rect = rect
         self.font = pg.font.Font("./Data/ARCADE_N.TTF", fontSize)
+        self.lastT = time.monotonic()
+        self.txtColor = txtColor
+        self.bgColor = bgColor
+        self.setText(text)
         
+    def setText(self, text):
+        self.text = text
         #render Text
         split_string = [s.strip() for s in self.text.split(" ") if len(s.strip()) > 0]
         
@@ -41,15 +46,12 @@ class Text:
             w, _ = self.font.size(self.lines[-1] + " " + split_string[0])
             if (w + self.rect.x) < (self.rect.w - self.rect.x):
                 self.lines[-1] = self.lines[-1] + " " + split_string[0]
+                split_string = split_string[1:]
             else:
                 self.lines.append("")
-            split_string = split_string[1:]
         
-        self.lines = [Line(self.font, l, 5, []) for l in self.lines[:-1]]
-        
-        
-        self.lastT = time.monotonic()
-        
+        self.lines = [Line(self.font, l, 5, offset = (self.rect.x, self.rect.y), txtColor = self.txtColor, bgColor = self.bgColor) for l in self.lines]
+    
     def scroll(self):
         if (self.linePos < (len(self.lines) - 1)):
             self.linePos += 1
@@ -61,7 +63,7 @@ class Text:
             line = self.lines[lineCounter + self.linePos]
             if not line.fits(self.rect, (0, currHeight)):
                 break
-            line.renderLine(surface, (0, currHeight))
+            line.renderLine(surface, (self.rect.x, currHeight))
             currHeight += line.height + line.spacing
             lineCounter += 1
         
