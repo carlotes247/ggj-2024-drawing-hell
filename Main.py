@@ -176,7 +176,7 @@ def run(screen, draw, state, characterSurface, grave, updatables):
             elif event.type == state.NEW_CHARACTER_EVENT:
                 state.diag.request()
                 draw.clear()
-                characterSurface.setCharacter(random.choice(["./Data/personShape1.png", "./Data/personShape2.png", "./Data/personShape3.png"]))
+                characterSurface.setCharacter(random.choice(["./Data/" + p + ".png" for p in json.load(open("./Data/person.json", "r")).keys()]))
                 characterSurface.setHighlightArea(state.diag.currRequest["objType"])
                 grave.generate(state)
         
