@@ -5,10 +5,9 @@ import numpy as np
 
 class CharacterSurface:
     
-    def __init__(self, position, image, positionMap, clothes = {}):
+    def __init__(self, position, positionMap, clothes = {}):
         
         self.pos = position
-        self.setCharacter(image)
         with open("./Data/person.json", "r") as f:
             self.map = json.load(f)
             

@@ -1,6 +1,7 @@
 import pygame as pg
 import functools
 import  random
+import json
 
 from DrawingSurface import DrawSurface
 from DialogueSurface import DialogueSurface, Line
@@ -80,7 +81,7 @@ def initDialogueSurface(surf):
     return res
 
 def initCharacterSurface(surf):
-    res = CharacterSurface(pg.Rect(CHARRECT.x, CHARRECT.y, CHARRECT.w, CHARRECT.h), "./Data/person.png", "./Data/person.json")
+    res = CharacterSurface(pg.Rect(CHARRECT.x, CHARRECT.y, CHARRECT.w, CHARRECT.h), "./Data/person.json")
     res.setCharacter("./Data/personShape1.png")
     return res
 
