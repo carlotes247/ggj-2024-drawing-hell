@@ -76,8 +76,7 @@ def initDrawingSurface(surf):
     return res
 
 def initDialogueSurface(surf):
-    res = DialogueSurface(surf, DIAGRECT)
-    res.setText("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.")
+    res = DialogueSurface(surf, DIAGRECT, bgColor = pg.Color(162, 126, 144), txtColor = "white")
     return res
 
 def initCharacterSurface(surf):
