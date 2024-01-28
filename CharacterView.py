@@ -5,20 +5,16 @@ import numpy as np
 
 class CharacterSurface:
     
-    def __init__(self, position, image, positionMap, shirt = None, shoe = None, pants = None):
+    def __init__(self, position, image, positionMap, clothes = {}):
         
         self.pos = position
         self.setCharacter(image)
         with open("./Data/person.json", "r") as f:
             self.map = json.load(f)
             
-        self.shirt = shirt
-        if (shirt is not None):
-            dressShirt(shirt)
-        self.shoe = shoe #transform
-        #self.shoe = pg.transform.scale(self.shoe, self.map["shoe"]["size"])
-        self.pants = pants #transform
-        #self.pants = pg.transform.scale(self.pants, self.map["pants"]["size"])
+        self.clothes = {}
+        for k, v in clothes.items():
+            self.dressCloth(v, k)
         
         self.highlight = None
         self.highlightRect = pg.Surface((32, 32), pg.SRCALPHA)
@@ -55,9 +51,7 @@ class CharacterSurface:
         del pixArr
         del aArr
         
-        self.shirt = None
-        self.pants = None
-        self.shoe = None
+        self.clothes = {}
     
     def transformFromImgToSurf(self, p):
         x, y = p
@@ -82,11 +76,11 @@ class CharacterSurface:
         self.highlight = type
         self.highlightRect = pg.transform.scale(self.highlightRect, sze)
     
-    def dressShirt(self, image):
-        self.shirt = image #transform
-        sze = self.map[self.imageName]["shirt"]["size"]
-        self.shirt = pg.transform.scale(self.shirt, (sze[0] * 2, sze[1] * 2))
-        self.shirt = pg.transform.scale(self.shirt, self.transformFromImgToSurf(self.map[self.imageName]["shirt"]["size"]))
+    def dressCloth(self, image, type):
+        self.clothes[type] = image #transform
+        sze = self.map[self.imageName][type]["size"]
+        self.clothes[type] = pg.transform.scale(self.clothes[type], (sze[0] * 2, sze[1] * 2))
+        self.clothes[type] = pg.transform.scale(self.clothes[type], self.transformFromImgToSurf(self.map[self.imageName][type]["size"]))
     
     def update(self, surface, state):
         surface.blit(self.image, self.pos)
@@ -98,14 +92,10 @@ class CharacterSurface:
             surface.blit(self.highlightRect, (off[0] + absOff[0] + self.pos[0], off[1] + absOff[1] + self.pos[1]))
         
         map = self.map[self.imageName]
-        if self.shoe is not None:
-            off = self.transformFromImgToSurf(map["shoe"]["offset"][0])
-            surface.blit(self.shoe, (off[0] + absOff[0] + self.pos[0], off[1] + absOff[1] + self.pos[1]))
-            off = self.transformFromImgToSurf(map["shoe"]["offset"][1])
-            surface.blit(self.shoe, (off[0] + absOff[0] + self.pos[0], off[1] + absOff[1] + self.pos[1]))
-        if self.pants is not None:
-            off = self.transformFromImgToSurf(map["pants"]["offset"])
-            surface.blit(self.pants, (off[0] + absOff[0] + self.pos[0], off[1] + absOff[1] + self.pos[1]))
-        if self.shirt is not None:
-            off = self.transformFromImgToSurf(map["shirt"]["offset"])
-            surface.blit(self.shirt, (off[0] + absOff[0] + self.pos[0], off[1] + absOff[1] + self.pos[1]))
+        
+        for k, v in self.clothes.items():
+            if v is None:
+                continue
+            off = self.transformFromImgToSurf(map[k]["offset"])
+            surface.blit(v, (off[0] + absOff[0] + self.pos[0], off[1] + absOff[1] + self.pos[1]))
+        

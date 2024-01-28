@@ -16,6 +16,14 @@
     {
         "requestText" : "Can I have shirt please?",
         "objType" : "shirt"
+    },
+    {
+        "requestText" : "HELP! I need pants.",
+        "objType" : "pants"
+    },
+    {
+        "requestText" : "Once my pants were on fire. Now they are gone.",
+        "objType" : "pants"
     }
     ]
 }
