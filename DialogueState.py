@@ -32,6 +32,6 @@ class DialogueState:
         self.currRequest = req
         self.diag.setText(req["requestText"])
     
-    def checkResponse(self):
+    def checkResponse(self, image):
         self.accept()
         

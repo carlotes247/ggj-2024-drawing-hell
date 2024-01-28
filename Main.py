@@ -142,8 +142,9 @@ def run(screen, draw, state, characterSurface, grave, updatables):
             if event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE:
                 return
             if event.type == state.SUBMIT_EVENT:
-                state.diag.checkResponse()
-                characterSurface.dressShirt(draw.getResultImage())
+                img = draw.getResultImage()
+                state.diag.checkResponse(img)
+                characterSurface.dressShirt(img)
                 pg.time.set_timer(pg.event.Event(state.NEW_CHARACTER_EVENT), 2000, loops = 1)
             elif event.type == state.NEW_CHARACTER_EVENT:
                 state.diag.request()
