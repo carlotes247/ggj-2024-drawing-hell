@@ -50,5 +50,8 @@ class DialogueState:
     
     def checkResponse(self, image, model, device):
         predictedClass = Classify(model, device, classes, test_data, image)
-        self.accept("shirt")
+        if (predictedClass == self.currRequest["objType"]):
+            self.accept(predictedClass)
+        else:
+            self.reject(predictedClass)
         
