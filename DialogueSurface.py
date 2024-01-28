@@ -1,5 +1,6 @@
 import pygame as pg
 import time
+from DrawUtil import drawRoundedRect
 
 from CustomButton import Button
 
@@ -74,17 +75,19 @@ class Text:
 
 #this handles overall placement and stuff like scroll buttons
 class DialogueSurface:
-    def __init__(self, parent, position):
+    def __init__(self, parent, position, bgColor = "grey", txtColor = "black", rounded = 4):
         self.rect = position
         
         self.surf = parent.subsurface(self.rect)
-        self.surf.fill(pg.Color("grey"))
+        self.rounded = rounded
+        self.bgColor = bgColor
+        drawRoundedRect(self.surf, pg.Rect(0, 0, self.rect.w, self.rect.h), color = self.bgColor, rounded = self.rounded)
+        #self.surf.fill(pg.Color("grey"))
         
         self.text = None
         
-        
-        
-        self.nextBtn = Button(">", pg.Rect(self.rect.w - 30, self.rect.h - 30, 20, 20), lambda state, clicked, held : self.scroll() if (clicked and not held) else 0)
+        self.nextBtn = Button(">", pg.Rect(self.rect.w - 30, self.rect.h - 30, 20, 20), lambda state, clicked, held : self.scroll() if (clicked and not held) else 0, color = bgColor, fontColor = txtColor)
+        self.text = Text("", pg.Rect(10, 15, self.rect.w, self.rect.h - 30), bgColor = bgColor, txtColor = txtColor)
         
     
     def scroll(self):
@@ -92,10 +95,10 @@ class DialogueSurface:
             self.text.scroll()
     
     def setText(self, text):
-        self.text = Text(text, pg.Rect(10, 15, self.rect.w, self.rect.h - 30))
+        self.text.setText(text)
     
     def update(self, screen, state):
-        self.surf.fill(pg.Color("grey"))
+        drawRoundedRect(self.surf, pg.Rect(0, 0, self.rect.w, self.rect.h), color = self.bgColor, rounded = self.rounded)
         self.nextBtn.update(self.surf, state)
         if (self.text is not None):
             self.text.update(self.surf, state)
