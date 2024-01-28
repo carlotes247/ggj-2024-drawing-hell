@@ -19,8 +19,6 @@ class CharacterSurface:
         self.highlight = None
         self.highlightRect = pg.Surface((32, 32), pg.SRCALPHA)
         self.highlightRect.fill((255, 255, 255, 24))
-        
-        
     
     def setCharacter(self, image):
         self.imageName = image[1 + image.rfind("/") : image.rfind(".")]
